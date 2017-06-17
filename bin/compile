@@ -8,17 +8,21 @@ indent() {
 echo "-----> Install ffmpeg-thumbnailer"
 BUILD_DIR=$1
 VENDOR_DIR="vendor"
-DOWNLOAD_URL="https://api.github.com/repos/johnklawlor/ffmpegthumbnailer/contents/ffmpegthumbnailer.tar.gz"
+DOWNLOAD_URL="https://github.com/dirkvdb/ffmpegthumbnailer/archive/2.2.0.tar.gz"
 
 echo "DOWNLOAD_URL = " $DOWNLOAD_URL | indent
 
 cd $BUILD_DIR
 mkdir -p $VENDOR_DIR
 cd $VENDOR_DIR
-curl --silent -L -H "Accept: application/vnd.github.raw" $DOWNLOAD_URL | tar xz
+curl -L --silent $DOWNLOAD_URL | tar xz
+cd ffmpegthumbnailer-2.2.0/
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/app/vendor/ffmpeg/lib/pkgconfig/"
+echo $PKG_CONFIG_PATH
+./configure --prefix /app/vendor/ffmpegthumbnailer && make install
 
 echo "exporting PATH and LIBRARY_PATH" | indent
-PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpegthumbnailer.sh"
+PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpeg-thumbnailer.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:vendor/ffmpegthumbnailer/bin"' >> $PROFILE_PATH
-echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:vendor/ffmpegthumbnailer/lib"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:vendor/ffmpeg-thumbnailer/bin"' >> $PROFILE_PATH
+echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:vendor/ffmpeg-thumbnailer/lib"' >> $PROFILE_PATH
