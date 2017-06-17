@@ -19,7 +19,7 @@ curl -L --silent $DOWNLOAD_URL | tar xz
 cd ffmpegthumbnailer-2.2.0/
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/app/vendor/ffmpeg/lib/pkgconfig/"
 echo $PKG_CONFIG_PATH
-./configure --prefix /app/vendor/ffmpegthumbnailer && make install
+cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_GIO=ON -DENABLE_THUMBNAILER=ON . && make && make install
 
 echo "exporting PATH and LIBRARY_PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpeg-thumbnailer.sh"
